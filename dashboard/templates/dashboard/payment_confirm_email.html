@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>PagoLink</title>
+</head>
+<body>
+
+<div style="padding:20px 15%;font-family:'ubuntu',proxima_nova,'Open Sans','Segoe UI',Arial,Verdana,'Lucida Sans Unicode',Tahoma,'Sans Serif';">
+
+    <h2 style="text-align:center;"><strong>¡Gracias por tu compra!</strong></h2><br>
+
+    <p>
+        Hola {{ name }},<br><br>
+        Hemos recibido tu compra en PagoLink con éxito<br><br>
+        <strong>DETALLES DE LA COMPRA</strong><br><br>
+        Nro de compra &nbsp;: <strong>{{ code }}</strong><br>
+        Producto &nbsp;: <strong>{{ product }}</strong><br>
+        Cliente &nbsp;: <strong>{{ fullaname }}</strong><br>
+        Cédula &nbsp;: <strong>{{ identity }}</strong><br>
+        Celular &nbsp;: <strong>{{ phone }}</strong><br>
+        Fecha &nbsp;: <strong>{{ date }}</strong><br>
+        <br>
+        Subtotal &nbsp;: <strong>$. {{ subtotal }}</strong><br>
+        Impuesto &nbsp;: <strong>$. {{ igv }}</strong><br>
+        Precio Total &nbsp;: <strong>$. {{ ammount_total }}</strong><br>
+    </p>
+    <h3>CONFIRMACIÓN</h3>
+    <p>Tu compra ya está aprobada y confirmado.</p>
+    <p style="text-align: center;">&nbsp;</p>
+    <p>&nbsp;</p>
+    <p style="text-align: center;">&nbsp;</p>
+    <p style="text-align: center;"></p>
+    <p style="border-bottom:1px solid #eee"></p><br>
+    <p style="text-align: center;color:#666;font-size:12px">
+        Copyright © 2020 PagoLink. Todos los derechos reservados.<br>
+        Correo: pagoslinkexpress@gmail.com<br>
+        WhatsApp: +593 99 059 2974<Br>
+    </p>
+    <p>
+        &nbsp;
+    </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,143 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}Pago Seguro{% endblock %} | PagoLink</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'dashboard/plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{% static 'dashboard/dist/css/adminlte.min.css' %}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-8 col-sm-12">
+            <div class="py-5 text-center">
+                <div class="card widget-user">
+                    <div class="widget-user-header bg-info">
+                        <h3 class="widget-user-username">{{ link.seller.user.first_name }} {{ link.seller.user.last_name}}</h3>
+                        <h6 class="widget-user-desc">{{ link.seller.user.email }}</h6>
+                    </div>
+                    <div class="widget-user-image">
+                        <img class="img-circle elevation-2" src="{% static 'dashboard/dist/img/avatar5.png' %}"
+                            alt="{{ link.seller.user.first_name }}">
+                    </div>
+                    <div class="card-footer bg-white text-left">
+                        {% if not link.active %}
+                        <div class="alert alert-danger">Link de cobro deshabilitado por el vendedor</div>
+                        {% else %}
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 order-md-2 mb-4">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-muted">Resumen</span>
+                                        <span class="badge badge-secondary badge-pill">2</span>
+                                    </h4>
+                                    <ul class="list-group mb-3">
+                                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                            <div>
+                                                <p class="text-muted">{{ link.description }}</p>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                            <div>
+                                                <h6 class="my-0">Subtotal</h6>
+                                            </div>
+                                            <span class="text-muted">${{ link.subtotal }}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                            <div>
+                                                <h6 class="my-0">Impuesto</h6>
+                                            </div>
+                                            <span class="text-muted">${{ link.igv }}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span>Monto Total</span>
+                                            <h4>${{ link.amount }}</h4>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-8 order-md-1">
+                                    <p>Hola {{ first_name }},</p>
+                                    <h4 class="mb-3">Realiza tu pago de manera segura</h4>
+                                    {% if errors %}
+                                    <div class="alert alert-danger">
+                                        Lo sentimos. Tu pago no ha sido procesado. Comunícate con el soporte
+                                        indicándoles el siguiente error:
+                                        <br>
+                                        {% for error in errors %}
+                                        <b>{{ error }}</b>
+                                        {% endfor %}
+                                    </div>
+                                    <a href="{% url 'link_pay_card' link.id %}" class="btn btn-primary btn-block">Volver
+                                        a intentar pagar</a>
+                                    <br>
+                                    {% else %}
+                                    <form class="paymentWidgets" action="{% url 'link_pay_process' link.id %}"
+                                        data-brands="VISA MASTER AMEX DINERS DISCOVER" method="post"></form>
+                                    {% endif %}
+                                    <a href="{% url 'link_pay' link.id %}" class="btn btn-outline-danger mt-2"><i
+                                            class="fa fa-arrow-left"></i> Volver atrás</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'dashboard/plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'dashboard/dist/js/adminlte.min.js' %}"></script>
+
+{% if link.active %}
+    {% if not errors %}
+        <!-- <script src="https://eu-prod.oppwa.com/v1/paymentWidgets.js?checkoutId={{ id }}"></script> <!--Producción-->
+        <script src="https://eu-test.oppwa.com/v1/paymentWidgets.js?checkoutId={{ id }}"></script> <!--Pruebas-->
+        <script type="text/javascript">
+            var wpwlOptions = {
+                onReady: function () {
+                    var numberOfInstallmentsHtml = '<div class="wpwl-label wpwl-label-custom" style="display:inline-block">Diferidos en:</div>' +
+                        '<div class="wpwl-wrapper wpwl-wrapper-custom" style="display:inline-block">' +
+                        '<select name="recurring.numberOfInstallments">' +
+                        '<option value="0">0</option>' +
+                        '<option value="3">3</option>' +
+                        '<option value="6">6</option>' +
+                        '</select>' +
+                        '</div>';
+                    $('form.wpwl-form-card').find('.wpwl-button').before(numberOfInstallmentsHtml);
+                }
+            }
+        </script>
+        <script type="text/javascript">
+            var wpwlOptions = {
+                onReady: function () {
+                    var datafast = '<br/><br/><img src="https://www.datafast.com.ec/images/verified.png" style="display:block;margin:0 auto; width:100%;">';
+                    $('form.wpwl-form-card').find('.wpwl-button').after(datafast);
+                },
+                style: "card",
+                locale: "es",
+                labels: { cvv: "CVV", cardHolder: "Nombre (Igual que en la tarjeta)" }
+            }
+        </script>
+    {% endif %}
+{% endif %}
+
+</body>
+<footer class="my-4 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2024 PagoLink</p>
+</footer>
+
+</html>

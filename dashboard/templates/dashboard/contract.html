@@ -1,0 +1,222 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% load static %}
+{% block title %}
+    Contrato online
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'dashboard/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'dashboard/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+{% block content %}
+
+    <section class="content py-4">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        {% if successs %}
+                            <div class="alert alert-success">
+                                Contrato aceptado. Ahora ya puedes empezaar a realizar tus operaciones. <a
+                                    href="{% url 'links_add' %}">Crea tu primer link de cobro</a>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-default-warning">
+                                Antes de empezar a realizar sus operaciones por favor lee detenidamente nuestro contrato
+                                de
+                                venta online y acepte.
+                            </div>
+                        {% endif %}
+
+                        <div class="border p-3">
+                            <h3 class="text-center">CONTRATO DE PRESTACIÓN DE SERVICIOS DIGITALES</h3>
+                            <p>ADREST DEL ECUADOR CIA. LTDA, es una compañía constituida y existente bajo las leyes de
+                                la República del Ecuador. ADREST DEL ECUADOR CIA. LTDA, es la propietaria del sistema
+                                PAGOLINK, y como tal guardará y registrará evidencia de la aceptación del usuario, de
+                                todas sus condiciones que incluyen confidencialidad u obligación a la no divulgación. Al
+                                clikear el botón de Aceptar, el usuario acepta sin reservas el sistema PAGOLINK y queda
+                                obligado por los términos y condiciones como si hubiera firmado un contrato legalmente
+                                vinculante. La utilización de los usuarios de la plataforma implica la aceptación de
+                                estándares, normativa y políticas establecidas por la propietaria del sistema.</p>
+                            <p>
+                                ADREST DEL ECUADOR declara que la aplicación PAGOLINK es confidencial y se encuentra
+                                sujeta a su propiedad intelectual.</p>
+                            <h4>CONDICIONES GENERALES</h4>
+                            <h5>- ALCANCE DE LA LICENCIA</h5>
+                            <p>Se aplicará a cualquier versión modificada o actualizada del software, base de datos y
+                                manual de instrucciones del usuario, permitiendo al usuario satisfacer sus
+                                requerimientos internos, pero no podrá proveerlos a ningún tercero, incluyendo a
+                                relacionados o no relacionados. Se prohíbe expresamente al usuario realizar actos de
+                                ingeniería inversa, descompilación o desamblado del software</p>
+                            <h5>- USUARIO, CONTRASEÑA Y SEGURIDAD</h5>
+                            <p>El acceso a personas usuarias del sistema se limita únicamente a personas capaces de
+                                contratar y habilitadas para ello conforme lo establecido en el marco legal ecuatoriano.
+                                ADREST DEL ECUADOR no hará un control de dicha capacidad legal, por lo cual dicha
+                                responsabilidad es de cada usuario.</p>
+                            <p>El usuario debe realizar el proceso de registro proporcionando a ADREST DEL ECUADOR la
+                                información solicitada, en forma actual, precisa y completa. El usuario también elegirá
+                                un nombre de usuario y contraseña. El usuario es totalmente responsable de conservar la
+                                confidencialidad de su usuario y contraseña, así como de todas las actividades que se
+                                lleven a cabo en su cuenta, debiendo comunicar de inmediato a ADREST DEL ECUADOR sobre
+                                cualquier uso no autorizado de su cuenta o cualquier otra vulnerabilidad sobre la
+                                seguridad. Ningún usuario podrá transferir sus credenciales o privilegio a ninguna otra
+                                persona</p>
+                            <p>ADREST DEL ECUADOR no será responsable sobre ninguna pérdida en la que pudiera incurrir
+                                el usuario como resultado de que otra persona utilice su cuenta y contraseña, con o sin
+                                su conocimiento, sin embargo, se podrá responsabilizar al usuario por las pérdidas en
+                                que incurra ADREST DEL ECUADOR u otra parte debido a que otra persona utilice la cuenta
+                                y contraseña del usuario.</p>
+                            <p>ADREST DEL ECUADOR no tiene obligación de verificar la identidad individual de los
+                                usuarios de sus servicios, y por lo tanto no podrá ser responsable por el robo de la
+                                identidad o uso indebido de la identidad o datos personales de cualquier usuario.</p>
+                            <p>Los usuarios están obligados a mantener información de contacto incluyendo número
+                                telefónico y correo electrónico.</p>
+                            <h5>- MODIFICACION DE TERMINOS</h5>
+                            <p>ADREST DEL ECUADOR tendrá derecho en cualquier momento a cambiar o modificar los términos
+                                y condiciones aplicables al uso por parte del usuario de la aplicación, o cualquier
+                                parte de la misma, o imponer nuevas condiciones, mismas que entrará en vigencia
+                                inmediatamente después de que se las dé a conocer o que se las notifique por distintos
+                                medios, lo cual incluye publicación en la web de la empresa, correo electrónico, o
+                                cualquier otro medio que permita al usuario recibir la notificación.</p>
+                            <p>Cualquier uso de PAGOLINK por parte del usuario posterior a dicha notificación, se
+                                considerará como aceptación vinculante por parte del usuario de dichos cambios,
+                                modificaciones o adiciones.</p>
+                            <h5>- EXONERACION DE RESPONSABILIDAD Y GARANTIAS LIMITADAS</h5>
+                            <p>En caso de que el usuario se encuentre insatisfecho con el servicio, podrá requerir a
+                                ADREST DEL ECUADOR a que revoque el acuerdo de usuario y cierre de cuenta, siendo estas
+                                las únicas medidas que ADREST DEL ECUADOR adoptará.</p>
+                            <p>ADREST DEL ECUADOR no garantiza que los servicios provistos podrán ser interrumpidos para
+                                propósitos de mantenimiento, actualización o por fallas del sistema o de la red, por
+                                tanto ADREST DEL ECUADOR no podrá ser considerada responsable por fallos, inhabilidad de
+                                acceso o condiciones fallidas de acceso al sistema dado el uso inapropiado del equipo,
+                                mal funcionamiento relacionado con los proveedores de servicios de telecomunicaciones,
+                                integradoras de pagos, tarjetas de crédito sobrecargas de la red u otras razones
+                                legalmente admisibles.</p>
+                            <p>De igual manera, ADREST DEL ECUADOR no será responsable por ningún conflicto entre
+                                usuarios.</p>
+                            <h5>- ETICA</h5>
+                            <p>Los usuarios aceptan conducirse de acuerdo a las normas de la comunidad usuaria del
+                                sistema, y de acuerdo con la ética generalmente aceptada en servicios digitales. Si
+                                éstas normas fueran violadas, los usuarios aceptarán la decisión de ADREST DEL ECUADOR
+                                en la aplicación de las sanciones que la empresa señale. ADREST DEL ECUADOR podrá
+                                restringir, condicionar, o terminar el carácter de un usuario, dicha censura puede ser
+                                indefinida o limitada por un período de tiempo.</p>
+                            <p>El usuario deberá utilizar la aplicación, únicamente para fines legales. El usuario no
+                                deberá efectuar actos comerciales que impliquen material o producto que viole o
+                                transgreda de alguna manera los derechos de otras personas, o cuya comercialización sea
+                                ilegal, difamatoria, que invada los derechos a la privacidad de imagen u otro derecho
+                                personal, que sea vulgar, obsceno e irreverente o de algún modo objetable y que estimule
+                                una conducta que pudiera constituir un delito penal.</p>
+                            <p>No se permitirá ninguna conducta por parte de un usuario que limite o inhiba a cualquier
+                                otro usuario referente al uso de la aplicación. </p>
+                            <h5>- POLITICA DE PRIVACIDAD y USO DE DATOS PERSONALES</h5>
+                            <p>ADREST DEL ECUADOR declara que en ningún caso proporcionará o comercializará datos
+                                personales a terceros, ajenos a la operación propia del sistema. La información que
+                                ADREST DEL ECUADOR reciba será utilizada únicamente con la finalidad de provisión de
+                                servicios prestados o datos estadísticos del comportamiento de los usuarios, gestión y
+                                administración de datos necesarios para usar el servicio y envío de comunicaciones
+                                comerciales por medios electrónicos, encuestas, y alertas vinculadas con el servicio
+                                prestado. La información personal proporcionada por los usuarios, no será transferida
+                                comercialmente a ningún tercero, a menos que se recabe expresamente el consentimiento
+                                del propietario de los datos.</p>
+                            <p>ADREST DEL ECUADOR podrá utilizar cookies o similares mecanismos a efectos de medición y
+                                análisis de tráfico del sistema, así como finalidades relacionadas a los servicios
+                                prestados. </p>
+                            <p>Los datos personales podrán alojarse en los servidores que posee la empresa, o que
+                                contrate con terceros para el pleno funcionamiento del sistema, siempre que garanticen
+                                un nivel de protección adecuado, para lo cual ADREST DEL ECUADOR ha implementado todas
+                                las medidas de seguridad necesarias para evitar que terceros no autorizados accedan a
+                                los datos de sus clientes, ello incluye las medidas de seguridad físicas y el acceso
+                                solo de empleados o subcontratistas que necesiten acceder a los datos solo por razones
+                                laborales, los cuales estarán sujetos a cláusulas de confidencialidad y obligaciones de
+                                secreto profesional, contemplados en el Articulo 302 del Código Penal de la legislación
+                                ecuatoriana.</p>
+                            <p>El usuario reconoce y acepta que la información y contenidos que resulten del uso de los
+                                servicios de ADREST DEL ECUADOR será claramente identificada de tal forma que se
+                                reconozca que la misma proviene y ha sido generada por ADREST DEL ECUADOR </p>
+                            <h5>- TARIFAS</h5>
+                            <p>El vendedor de cualquier bien o servicio que contrate el sistema PAGOLINK para la
+                                intermediación de pagos con tarjetas de curso legal en el territorio nacional, para
+                                acceder al sistema cancelará por concepto de uso de licencia la suma de USD 25 por una
+                                única vez, más USD 10 anuales por renovación del servicio.</p>
+                            <p>El servicio de provisión del sistema PAGOLINK por parte de ADREST DEL ECUADOR mantendrá
+                                el siguiente cuadro tarifario por servicios administrativos y de mantenimiento, que será
+                                aplicado al comprador final de bienes y servicios administrados a través del sistema
+                                PAGOLINK:</p>
+                            <table class="table table-striped">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Monto de venta (USD)</th>
+                                    <th scope="col">Tarifa</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1 - 100</td>
+                                    <td>3% + 0.20</td>
+                                </tr>
+                                <tr>
+                                    <td>101 - 500</td>
+                                    <td>2.5% + 0.20</td>
+                                </tr>
+                                <tr>
+                                    <td>501 – 1.000</td>
+                                    <td>2% + 0.20</td>
+                                </tr>
+                                <tr>
+                                    <td>Más de 1.000</td>
+                                    <td>1.5% + 0.20</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <p>ADREST DEL ECUADOR se reserva el derecho de modificar, cambiar, agregar o eliminar las
+                                tarifas vigentes en cualquier momento, previa notificación a los usuarios con una
+                                anticipación mínima de ocho días calendario.
+                            </p>
+                            <p>Las tarifas aplicadas por ADREST DEL ECUADOR son independientes a las que aplique la
+                                operadora de la pasarela de pagos u operadoras de tarjetas financieras.</p>
+                            <form method="post">
+                                {% csrf_token %}
+
+                                {% if successs %}
+                                    <input type="submit" value="Contrato aceptado" class="btn btn-success btn-lg" disabled>
+                                {% else %}
+                                    <input type="submit" value="Aceptar contrato" class="btn btn-primary btn-lg">
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+{% block javascript %}
+    <!-- DataTables -->
+    <script src="{% static 'dashboard/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $('#customers').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+
+
+{% endblock %}

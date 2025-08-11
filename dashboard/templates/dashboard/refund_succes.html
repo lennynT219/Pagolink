@@ -1,0 +1,100 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% load static %}
+{% block title %}
+    Reembolso
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'dashboard/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'dashboard/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+{% block content %}
+
+    <section class="content py-4">
+        <a href="{% url 'sales' %}" class="btn btn-outline-primary"><i class="fa fa-arrow-left"></i> Volver atras</a>
+        <div class="row mt-3">
+            <div class="col-12">
+
+                <div class="card">
+                    {% if success %}
+                        <div class="card-header">
+                            <h3 class="card-title">Reembolso <b>00{{ refund.id }}</b></h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="alert alert-success">
+                                Hemos recibido tu solicitud de devolución con éxito. Dentro de 24 horas máximo
+                                procesaremos y aprobaremos
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Total</label>
+                                        <p>$ {{ refund.amount }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Fecha de reembolso</label>
+                                        <p> - $ {{ refund.created_at }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Estado</label>
+
+                                        {% if refund.state %}
+                                            <p class="text-success"> Reembolsado</p>
+                                        {% else %}
+                                            <p class="text-warning"> Pendiente de aprobación</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <h5>Datos del cliente</h5>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Cliente</label>
+                                        <p>{{ refund.first_name }} {{ refund.last_name }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Cédula</label>
+                                        <p>{{ refund.identity }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Nro de celular</label>
+                                        <p>{{ refund.phone }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email</label>
+                                        <p>{{ refund.email }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-default-success">
+                            No hemos podido procesar tu solicitud de devolución. ¡Intenta de nuevo!.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- / .row -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+{% block javascript %}
+
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+
+
+{% endblock %}

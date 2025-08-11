@@ -1,0 +1,147 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% block title %}
+    Agregar método de pago
+{% endblock %}
+
+{% block content %}
+
+    <section class="content py-4">
+        <div class="container-fluid">
+            {% if success %}
+                <div class="alert alert-success">
+                    Método de pago registrado con éxito.
+                </div>
+            {% endif %}
+            {% for error in errors %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            {% endfor %}
+            <div class="row">
+                {% if bank %}
+                    <div class="col-12">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title">Método de pago</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Banco</label>
+                                            <p>{{ bank.bank.title }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Titular de la cuenta</label>
+                                            <p>{{ bank.fullname }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Tipo de cuenta</label>
+                                            <p>{{ bank.account_type }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Nro de cuenta</label>
+                                            <p>{{ bank.account_number }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Código de cuenta
+                                                interbancario(CCI)</label>
+                                            <p>{{ bank.cci }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="card-footer">
+                                <a href="{% url 'payment_method_update' %}" class="btn btn-outline-danger"><i
+                                        class="fa fa-edit"></i> Editar</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title">Agregar método de pago</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Banco</label>
+                                                {{ form.bank }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Titular de la cuenta</label>
+                                                {{ form.fullname }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Tipo de cuenta</label>
+                                                {{ form.account_type }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Nro de cuenta</label>
+                                                {{ form.account_number }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Código de cuenta
+                                                    interbancario(CCI)</label>
+                                                {{ form.cci }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="alert alert-default-info">
+                            A esta cuenta haremos la transferencia de tus ventas descontando nuestra comisión. Por el
+                            momento solo trabajamos con moneda Dolar.
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

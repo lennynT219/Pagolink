@@ -1,0 +1,251 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% load static %}
+{% block title %}
+    Verfíl del vendedor
+{% endblock %}
+
+{% block content %}
+    <section class="content py-3">
+
+        <div class="container-fluid">
+            <a href="{% url 'customers' %}" class="btn btn-outline-primary mr-3"><i class="fa fa-arrow-left"></i> Volver
+                atrás</a>
+            <a href="" class="btn btn-primary"><i class="fa fa-save"></i> Exportas ventas</a>
+
+            <div class="card mt-3 card-primary card-outline">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md 6">
+
+                            <h4 class="profile-username">{{ seller.user.first_name }} {{ seller.user.last_name }}</h4>
+                            <p>{{ seller.user.email }}</p>
+                            <p><b>Cédula: </b>{{ seller.identification }} - <b>Celular: </b>{{ seller.phone }}</p>
+
+                        </div>
+                        <div class="col-md 6">
+                            <ul class="list-group list-group-unbordered mb-3">
+                                <li class="list-group-item">
+                                    <b>Total links</b> <a class="float-right">{{ links|length }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Total ventas</b> <a class="float-right">$ {{ total|floatformat:"2" }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                    {% if seller.paymentmethod %}
+                        <p><b>Cuenta bancaria: </b>{{ seller.paymentmethod.bank }}
+                            - {{ seller.paymentmethod.account_type }}</p>
+                        <p><b>Nro de cuenta y CCI:</b> {{ seller.paymentmethod.account_number }}
+                            - {{ seller.paymentmethod.cci }}</p>
+                    {% endif %}
+                </div>
+                <!-- /.card-body -->
+            </div>
+
+            <div class="row mt-3">
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item"><a class="nav-link" href="#activity"
+                                                        data-toggle="tab">Links</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link active" href="#timeline" data-toggle="tab">Ventas</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="#contract" data-toggle="tab">Contrato</a>
+                                </li>
+                            </ul>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane" id="activity">
+                                    {% if links|length == 0 %}
+                                        <div class="alert alert-default-info">
+                                            Este vendedor aún no tiene links creados</a>
+                                        </div>
+                                    {% else %}
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Descripción</th>
+                                                <th>Subtotal</th>
+                                                <th>Total</th>
+                                                <th>Estado</th>
+                                                <th>Creado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for link in links %}
+                                                <tr>
+
+                                                    <td>{{ link.description|slice:"20" }}</td>
+                                                    <td>
+                                                        $ {{ link.subtotal }}
+                                                        <br>
+                                                        iva: $ {{ link.igv }}
+                                                    </td>
+                                                    <td>
+                                                        <b>$ {{ link.amount }}</b>
+                                                    </td>
+                                                    <td>
+                                                        {% if link.unique and link.is_payment %}
+                                                            <div class="badge badge-success">Pagado</div>
+                                                        {% elif link.active %}
+                                                            <div class="badge badge-info">Activo</div>
+                                                        {% else %}
+                                                            <div class="badge badge-danger">Cancelado</div>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ link.created_at }}</td>
+                                                    <td>
+                                                        <a href="{% url 'link_pay' link.id %}" class="badge badge-info"
+                                                           target="_blank">
+                                                            <i class="fas fa-link" data-toggle="tooltip"
+                                                               data-placement="top"></i>
+                                                            Copiar
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tfoot>
+                                        </table>
+                                    {% endif %}
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane active" id="timeline">
+
+                                    {% if sales|length > 0 %}
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Nro</th>
+                                                <th>Cédula</th>
+                                                <th>Cliente</th>
+                                                <th>Teléfono</th>
+                                                <th>Correo</th>
+                                                <th>Fecha</th>
+                                                <th>Subtotal</th>
+                                                <th>Iva</th>
+                                                <th>Comisión</th>
+                                                <th>Total</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for sale in sales %}
+                                                <tr>
+                                                    <td>{{ sale.id }}</td>
+                                                    <td>
+                                                        {{ sale.identity }}
+                                                    </td>
+                                                    <td>
+                                                        {{ sale.first_name }} {{ sale.last_name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ sale.phone }}
+                                                    </td>
+                                                    <td>
+                                                        <small>{{ sale.email }}</small>
+                                                    </td>
+                                                    <td>{{ sale.created_at|date }}</td>
+                                                    <td>
+                                                        +${{ sale.subtotal }}
+                                                    </td>
+                                                    <td>
+                                                        ${{ sale.igv }}
+                                                    </td>
+                                                    <td>
+                                                        ${{ sale.commission }}
+                                                    </td>
+                                                    <td>
+                                                        <div class="text-blue">$ {{ sale.amount_client }}</div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tfoot>
+                                        </table>
+                                    {% else %}
+                                        <div class="alert alert-default-info">
+                                            Este vendedor aún no tiene ventas.
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="tab-pane" id="timeline">
+
+                                    {% if sales|length > 0 %}
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Cliente</th>
+                                                <th>Correo</th>
+                                                <th>Fecha de compra</th>
+                                                <th>Subtotal</th>
+                                                <th>Total</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for sale in sales %}
+                                                <tr>
+                                                    <td>
+                                                        {{ sale.first_name }} {{ sale.last_name }}
+                                                        <br>- {{ sale.identity }}
+                                                    </td>
+                                                    <td>
+                                                        {{ sale.email }}
+                                                        <br> - {{ sale.phone }}
+                                                    </td>
+                                                    <td>{{ sale.created_at }}</td>
+                                                    <td>
+                                                        +${{ sale.subtotal }} + ${{ sale.igv }} <small>iva</small>
+                                                        <div class="text-red">-${{ sale.commission }}
+                                                            <small>comisión</small></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="text-blue">$ {{ sale.amount_client }}</div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tfoot>
+                                        </table>
+                                    {% else %}
+                                        <div class="alert alert-default-info">
+                                            Este vendedor aún no tiene ventas.
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="tab-pane" id="contract">
+
+                                    {% if not contract %}
+                                        <div class="alert alert-default-warning">
+                                            Este vendedor aún no ha aceptado el contrado
+                                        </div>
+                                    {% else %}
+                                        <div class="border p-3">
+                                            <h4>CONTRATO ACEPTADO</h4>
+                                            <p><b>Nombres
+                                                completos: </b> {{ seller.user.first_name }} {{ seller.user.last_name }}
+                                            </p>
+                                            <p><b>Fecha: </b> {{ contract.created_at }}</p>
+                                            <p><b>Ip: </b> {{ contract.ip }}</p>
+                                            <p><b>Ubicación: </b> {{ contract.city }}</p>
+                                            <p><b>Cédula: </b> {{ seller.identification }}</p>
+                                            <p><b>Celular: </b> {{ seller.phone }}</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                            <!-- /.tab-content -->
+                        </div><!-- /.card-body -->
+                    </div>
+                    <!-- /.nav-tabs-custom -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+{% endblock %}

@@ -1,0 +1,185 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% load static %}
+{% block title %}
+    Destalle del link
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'dashboard/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'dashboard/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+{% block content %}
+
+    <section class="content py-4">
+        <a href="{% url 'links' %}" class="btn btn-outline-primary"><i class="fa fa-arrow-left"></i> Volver atras</a>
+        <div class="row mt-3">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <p>Aquí tienes tu link de cobro. Envíales a tus cliente por redes sociales como Whatsapp, Facebook, etc.</p>
+                        <p class="alert alert-default-info">
+                            https://{{ site }}{% url 'link_pay' link.id %}
+                        </p>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted"><i
+                                                class="fa fa-shopping-cart"></i> Cantidad de ventas</span>
+                                        <span class="info-box-number text-center text-muted mb-0">{{ sales|length }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted"><i class="fas fa-wallet"></i> Monto total vendido</span>
+                                        <span class="info-box-number text-center text-muted mb-0">$ {{ total }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted"><i class="fa fa-eye"></i> Cantidad de visitas</span>
+                                        <span class="info-box-number text-center text-muted mb-0">{{ link.visitors }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Subtotal</label>
+                                    <p>$ {{ link.subtotal }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Impuesto</label>
+                                    <p>$ {{ link.igv }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Monto total</label>
+                                    <p>$ {{ link.amount }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Descripción</label>
+                                    <p>{{ link.description }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Tipo de cobro</label>
+                                    {% if link.unique %}
+                                        <p>Cobro único de un solo cliente</p>
+                                    {% else %}
+                                        <p>Múltiples cobros de varios clientes</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Creado el</label>
+                                    <p>{{ link.created_at }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <h5>Clientes invitados</h5>
+                        {% if clients|length == 0 %}
+                            <div class="alert alert-default-info">
+                                No invitaste a ningún cliente
+                            </div>
+                        {% else %}
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Cédula</th>
+                                    <th>Correo</th>
+                                    <th>Nro de celular</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for client in clients %}
+                                    <tr>
+                                        <td>
+                                            {{ client.first_name }} {{ client.last_name }}
+                                        </td>
+                                        <td>
+                                            {% if client.identity %}
+                                                {{ client.identity }}
+                                            {% else %}
+                                                ---
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if client.email %}
+                                                {{ client.email }}
+                                            {% else %}
+                                                ---
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if client.phone %}
+                                                {{ client.phone }}
+                                            {% else %}
+                                                ---
+                                            {% endif %}
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                                </tfoot>
+                            </table>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+{% block javascript %}
+    <!-- DataTables -->
+    <script src="{% static 'dashboard/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        $(function () {
+            $('#customers').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+
+
+{% endblock %}
