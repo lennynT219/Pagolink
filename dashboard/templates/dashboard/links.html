@@ -1,0 +1,141 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% load static %}
+{% block title %}
+    Links de pagos
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'dashboard/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'dashboard/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+{% block content %}
+
+    <section class="content py-4">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Links de pagos</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        {% if links|length == 0 %}
+                            <div class="alert alert-info">
+                                Aún no has creado ningún link de pago. <a href="{% url 'links_add' %}">Crea uno
+                                nuevo</a>
+                            </div>
+                        {% else %}
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Cliente</th>
+                                    <th>Descripción</th>
+                                    <th>Subtotal</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                    <th>Creado el</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for link in links %}
+                                    <tr>
+                                        <td>
+                                            {% if link.unique %}
+                                                Cobro único
+                                            {% else %}
+                                                Cobro múltiple
+                                            {% endif %}
+
+                                        </td>
+                                        <td>
+                                            {% if link.client_set.first %}
+                                                {{ link.client_set.first.first_name }} {{ link.client_set.first.last_name }}
+                                                <br> {{ link.client_set.first.email|default_if_none:"" }} - {{ link.client_set.first.phone|default_if_none:"" }}
+                                            {% else %}
+                                                ---
+                                            {% endif %}
+
+                                        </td>
+                                        <td>{{ link.description|slice:"20" }}</td>
+                                        <td>
+                                            $ {{ link.subtotal }}
+                                            <br>
+                                            iva: $ {{ link.igv }}
+                                        </td>
+                                        <td>
+                                            <b>$ {{ link.amount }}</b>
+                                        </td>
+                                        <td>
+                                            {% if link.unique and link.is_payment %}
+                                                <div class="badge badge-success">Pagado</div>
+                                            {% elif link.active %}
+                                                <div class="badge badge-info">Activo</div>
+                                            {% else %}
+                                                <div class="badge badge-danger">Cancelado</div>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ link.created_at }}</td>
+                                        <td>
+                                            <a href="{% url 'links_detail' link.id %}" class="badge badge-info">
+                                                <i class="fas fa-eye"></i>
+                                                Ver
+                                            </a>
+                                            <a href="{% url 'link_pay' link.id %}" class="badge badge-info"
+                                               data-toggle="tooltip" target="_blank"
+                                               data-placement="top" title="Haz clic para copiar tu link de cobro">
+                                                <i class="fas fa-link"></i>
+                                                Link
+                                            </a>
+                                            <br>
+                                            <a href="{% url 'links_update' link.id %}" class="badge badge-warning"><i
+                                                    class="fas fa-times"></i>
+                                                Editar</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tfoot>
+                            </table>
+                        {% endif %}
+
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+{% block javascript %}
+    <!-- DataTables -->
+    <script src="{% static 'dashboard/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        $(function () {
+            $('#customers').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+
+
+{% endblock %}

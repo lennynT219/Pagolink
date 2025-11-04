@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}
+    Correo activado
+{% endblock %}
+
+{% block content %}
+
+    <div class="container py-5">
+        <div class="">
+
+        </div>
+        <div class="alert alert-success my-5" role="alert">
+            Correo electrónico verificado con éxito. Ahora ya puedes crear tus enlaces de cobros.
+        </div>
+
+        <div class="mt-20">
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">Ver mi cuenta</a>
+        </div>
+    </div>
+
+{% endblock %}

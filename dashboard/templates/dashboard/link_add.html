@@ -1,0 +1,146 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% block title %}
+    Crear nuevo link de pagos
+{% endblock %}
+
+{% block content %}
+
+    <section class="content py-4">
+        <div class="container-fluid">
+            {% if success %}
+                <div class="alert alert-success">
+                    Link de pago creado con éxito. <a href="{% url 'links' %}">Ver todos</a>
+                </div>
+            {% endif %}
+            {% for error in errors %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            {% endfor %}
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Crear nuevo link de pago</h3>
+                        </div>
+                        {% if enabled %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Monto a cobrar</label>
+                                                <input type="number" name="subtotal" class="form-control"
+                                                       placeholder="0.00" step=".01"
+                                                       required min="1">
+                                                      {% if error %}
+                                                          <div class="alert alert-danger">
+                                                              {{ error }}
+                                                          </div>
+                                                      {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">¿El valor incluye IVA?</label>
+                                                <div>
+                                                    <input type="radio" id="huey" name="igv" value="1" required>
+                                                    <label class="mr-3" for="huey">Si</label>
+                                                    <input type="radio" id="huey" name="igv" value="0">
+                                                    <label for="huey">No</label>
+                                                </div>
+                                                <p class="text-danger">Si selecciona la opción SI, se añadirá el valor del 12%, caso contrario el valor de impuesto será 0.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Descripción</label>
+                                                <textarea type="number" name="description" class="form-control"
+                                                          placeholder="Ingresa una descripción" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">¿Que tipo de cobro va realizar?</label>
+                                                <select class="form-control" name="unique" id="">
+                                                    <option value="0" selected>Varios cobros de varios clientes</option>
+                                                    <option value="1">Cobro único de un solo cliente</option>
+                                                </select>
+                                                <small>Seleccione un tipo de cobro</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p>Ingresa los datos de tu cliente. Si no tienes dejalo vació.</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Nombres</label>
+                                                <input type="text" class="form-control" name="firstname"
+                                                       placeholder="" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Apellidos</label>
+                                                <input type="text" class="form-control" name="lastname"
+                                                       placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Cédula de identidad(opcional)</label>
+                                                <input type="number" class="form-control" name="identity"
+                                                       placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Correo(opcional)</label>
+                                                <input type="email" class="form-control" name="email"
+                                                       placeholder="">
+                                                <small class="text-gray">Enviaremos tu link de cobro a este
+                                                    correo.</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Nro de celular(opcional)</label>
+                                                <input type="text" class="form-control" name="phone"
+                                                       placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Crear Link</button>
+                                </div>
+                            </form>
+                        {% else %}
+                            <div class="card-body">
+                                <div class="alert alert-danger">
+                                    Para que puedas crear un link de cobro primero debes verificar tu correo. Hemos
+                                    enviados un email con las instrucciones.
+                                </div>
+
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

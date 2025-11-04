@@ -1,0 +1,89 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% block title %}
+    Editar vendedor
+{% endblock %}
+
+{% block content %}
+
+    <section class="content py-4">
+        <div class="container-fluid">
+            {% if success %}
+                <div class="alert alert-success">
+                    Vendedor editado con éxito. <a href="{% url 'customers' %}">Ver todos</a>
+                </div>
+            {% endif %}
+            {% if error %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Editar datos del vendedor</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Nombres</label>
+                                            {{ form_user.first_name }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Apellidos</label>
+                                            {{ form_user.last_name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Cédula de indentidad</label>
+                                            {{ form_custom.identification }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Nro de celular</label>
+                                            {{ form_custom.phone }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Correo electrónico</label>
+                                            {{ form_user.email }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            {{ form_custom.state }}
+                                            <label class="form-check-label"><b>Estado</b></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                                <a href="{% url 'customers' %}" class="btn btn-outline-danger">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

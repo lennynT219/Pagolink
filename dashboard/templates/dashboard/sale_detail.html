@@ -1,0 +1,178 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% load static %}
+{% block title %}
+    Detalles de la venta
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'dashboard/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'dashboard/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+{% block content %}
+
+    <section class="content py-4">
+        <a href="{% url 'sales' %}" class="btn btn-outline-primary"><i class="fa fa-arrow-left"></i> Volver atras</a>
+        <div class="row mt-3">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Detalles de la venta nro <b>00{{ link.id }}</b></h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Subtotal</label>
+                                    <p>$ {{ sale.subtotal }} + $ {{ sale.igv }} iva</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Comisión</label>
+                                    <p class="text-red"> - $ {{ sale.commission }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Total</label>
+                                    <p>$ {{ sale.amount }} -<span
+                                            class="text-success"> Ganado <b>${{ sale.amount_client }}</b></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Fecha de compra</label>
+                                    <p>{{ sale.created_at }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Descripción</label>
+                                    <p>{{ sale.description }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Link de cobro</label>
+                                    {% if sale.link %}
+                                        <p>Nro 00{{ sale.link.id }} -
+                                            <a href="{% url 'links_detail' sale.link.id %}" target="_blank">Ver link</a>
+                                        </p>
+                                    {% else %}
+                                        <p>Link de cobro desactivado o eliminado</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr>
+                        <h5>Detalles del cliente</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Cliente</label>
+                                    <p>{{ sale.first_name }} {{ sale.last_name }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Cédula</label>
+                                    <p>{{ sale.identity }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Nro de celular</label>
+                                    <p>{{ sale.phone }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Correo</label>
+                                    <p>{{ sale.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                            Solicitar devolución
+                        </button>
+                        <a href="{% url 'invoice' sale.id %}" target="_blank" class="btn btn-info"><i
+                                class="fa fa-file-invoice"></i> Ver factura</a>
+                    </div>
+                    <!-- Button trigger modal -->
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form action="{% url 'refund_send' sale.id %}" method="get">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Solicitar devolución</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="alert alert-default-warning">
+                                            Se devolverá el monto total de la venta y se abonará al cliente en un máximo de 24 horas una vez aprobado.
+                                        </div>
+                                        <div class="form-group mt-2">
+                                            <input type="text" name="description" class="form-control"
+                                                   placeholder="Motivo de la devolución">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                        </button>
+                                        <button type="submit" class="btn btn-danger">Enviar solicitud</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+{% block javascript %}
+    <!-- DataTables -->
+    <script src="{% static 'dashboard/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        $(function () {
+            $('#customers').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+
+
+{% endblock %}

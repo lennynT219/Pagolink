@@ -1,0 +1,75 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% block title %}
+    Inicio
+{% endblock %}
+{% block content %}
+
+
+    <section class="content py-4">
+
+        {% if not email_active %}
+
+            <div class="alert alert-danger">
+                Por favor verifica tu correo, hemos enviado las intrucciones para validar tu correo. Si no encuentras revisa la carpeta SPAM.
+            </div>
+        {% elif not active %}
+            <div class="alert alert-default-warning">
+                Ya puedes crear tus enlaces de cobros mientras nosotros verificamos tus datos.
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+              <span class="info-box-icon bg-info elevation-1">
+                  <i class="fas fa-link"></i>
+              </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Links</span>
+                        <span class="info-box-number">
+                  {{ links|length }}
+                </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Ventas</span>
+                        <span class="info-box-number">$ {{ sale }}</span>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-undo-alt"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Reembolsos</span>
+                        <span class="info-box-number">$ {{ refund }}</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h4>Bienvenido/a {{ request.user.first_name }}</h4>
+                <div class="alert alert-default-info">
+                    Te invitamos a crear tu link de cobro y recibir pagos por internet.
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock %}

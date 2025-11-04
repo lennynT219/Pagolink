@@ -1,0 +1,91 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% load static %}
+{% block title %}
+    Vendedores
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'dashboard/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'dashboard/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+{% block content %}
+
+    <section class="content py-3">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Lista de todos los vendedores</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Vendedor</th>
+                                <th>Correo</th>
+                                <th>Celular</th>
+                                <th>Cédula</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for customer in customers %}
+                                <tr>
+                                    <td>{{ customer.user.first_name }} {{ customer.user.last_name }}</td>
+                                    <td>{{ customer.user.email }}</td>
+                                    <td>{{ customer.phone }}</td>
+                                    <td>{{ customer.identification }}</td>
+                                    <td>
+                                        {% if customer.state %}
+                                            <div class="badge badge-success">Activo</div>
+                                        {% else %}
+                                            <div class="badge badge-warning">Pendiente</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'customers_edit' customer.id %}" class="badge badge-info"><i
+                                                class="fa fa-edit"></i> Editar</a>
+                                        <a href="{% url 'customers_profile' customer.id %}" class="badge badge-success"><i
+                                                class="fa fa-eye"></i> Ver</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+{% block javascript %}
+    <!-- DataTables -->
+    <script src="{% static 'dashboard/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $('#customers').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+
+
+{% endblock %}

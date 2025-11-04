@@ -1,0 +1,124 @@
+{% extends 'dashboard/base/baseadmin.html' %}
+{% load static %}
+{% block title %}
+    Ventas
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'dashboard/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'dashboard/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+{% block content %}
+
+    <section class="content py-4">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Total de ventas: <b>$ {{ total|floatformat:"2" }}</b></h4>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a href="{% url 'sales_export' %}" class="btn btn-success" target="_blank"><i
+                                        class="fa fa-file-csv"></i> Exportar CSV</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <p>Lista de todas tus ventas</p>
+                        {% if sales|length > 0 %}
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Nro</th>
+                                    <th>Cliente</th>
+                                    <th>Cédula</th>
+                                    <th>Celular</th>
+                                    <th>Correo</th>
+                                    <th>Fecha</th>
+                                    <th>Subtotal</th>
+                                    <th>Iva(%)</th>
+                                    <th>Comisión</th>
+                                    <th>Total</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for sale in sales %}
+                                    <tr>
+                                        <td>
+                                            <b>{{ sale.id }}</b>
+                                        </td>
+                                        <td>
+                                            {{ sale.first_name }} {{ sale.last_name }}
+                                        </td>
+                                        <td>{{ sale.identity }}</td>
+                                        <td>{{ sale.phone }}</td>
+                                        <td>
+                                            <small>{{ sale.email }}</small>
+                                        </td>
+
+                                        <td>{{ sale.created_at|date }}</td>
+                                        <td>
+                                            $ {{ sale.subtotal|floatformat:"2" }}
+                                        </td>
+                                        <td>
+                                            $ {{ sale.igv|floatformat:"2" }}
+                                        </td>
+                                        <td>
+                                            $ {{ sale.commission|floatformat:"2" }}
+                                        </td>
+                                        <td>
+                                            $ <div class="text-blue">{{ sale.amount_client|floatformat:"2" }}</div>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'sales_detail' sale.id %}" class="badge badge-info"><i
+                                                    class="fa fa-eye"></i> Ver</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tfoot>
+                            </table>
+                        {% else %}
+                            <div class="alert alert-default-info">
+                                Todavía no tienes ventas realizadas.
+                            </div>
+                        {% endif %}
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+{% block javascript %}
+    <!-- DataTables -->
+    <script src="{% static 'dashboard/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $('#customers').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+
+
+{% endblock %}
