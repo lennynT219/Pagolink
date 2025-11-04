@@ -24,7 +24,14 @@ SECRET_KEY = "gqi2%ot6j!(wy5=x1-id(o-#6^$#y!5m)$-+!cp3q)lx---mi0"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["157.245.234.210", "pagolinkec.com", "127.0.0.1", "137.184.239.95"]
+ALLOWED_HOSTS = [
+    "157.245.234.210",
+    "pagolinkec.com",
+    "127.0.0.1",
+    "137.184.239.95",
+    "157.230.172.172",
+    "pagolink.ec",
+]
 
 # Application definition
 
